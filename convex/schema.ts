@@ -18,7 +18,7 @@ export default defineSchema({
             title: v.string(),
             image: v.string(),
             instruction: v.string(),
-            userInstruction: v.string(),
+            userInstruction: v.string(), 
             sampleQuestions: v.array(v.string())
           })
         )

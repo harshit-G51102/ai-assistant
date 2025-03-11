@@ -7,10 +7,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { AuthContext } from '@/context/AuthContext';
 import { api } from '@/convex/_generated/api';
 import AiAssistantsList from '@/services/AiAssistantsList';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
-import React, { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useContext, useEffect, useState } from 'react';
 
 export type ASSISTANT = {
   id: number;
@@ -68,6 +69,20 @@ function AiAssistants() {
     }
     setLoading(false);
   };
+
+  const router=useRouter();
+
+  const fetchAssistants=useQuery(api.userAiAssistants.getUserAssistants, user?._id ? { uid: user._id } : "skip")
+  useEffect(() => {
+    if (fetchAssistants && fetchAssistants.length > 0) {
+      console.log("User's Assistants:", fetchAssistants);
+      router.push('/workspace'); // 🚀 Navigate to workspace
+    }
+    else{
+      console.log('no assistants found');
+    }
+  }, [fetchAssistants,router]);
+
 
   return (
     <div className='px-10 mt-20 md:px-20 lg:px-36 xl:px-48'>
