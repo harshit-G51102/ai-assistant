@@ -39,6 +39,9 @@ function MainProvider({
         useEffect(()=>{
             CheckUseAuth();
         },[]);
+        if (!user) {
+          return null; 
+        }
   return (
     <div><AssistantContext.Provider value={{assistant,setAssistant}}>
       <Header></Header>{children}

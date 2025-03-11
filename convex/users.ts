@@ -11,7 +11,7 @@ export const CreateUser=mutation({
     handler:async(ctx,args)=>{
         const user=await ctx.db.query('users').filter(q=>q.eq(q.field('email'),args.email)).collect();
 
-        if(user?.length==0){
+        if(user?.length==0){ 
             const data={
                 name:args.name,
                 email:args.email,

@@ -28,7 +28,8 @@ function AiAssistants() {
   const [selectedAssistant, setSelectedAssistant] = useState<ASSISTANT[]>([]); // ✅ Fixed typing
   const insertAssistant = useMutation(api.userAiAssistants.insertSelectedAssistants);
   const [loading, setLoading] = useState(false);
-
+  const router=useRouter();
+  
   const onSelect = (assistant: ASSISTANT) => {
     const item = selectedAssistant.find((item) => item.id === assistant.id);
     if (item) {
@@ -68,15 +69,14 @@ function AiAssistants() {
       console.error('Error inserting assistants:', error);
     }
     setLoading(false);
+    router.push('/workspace'); // 🚀 Navigate to workspace
   };
 
-  const router=useRouter();
 
   const fetchAssistants=useQuery(api.userAiAssistants.getUserAssistants, user?._id ? { uid: user._id } : "skip")
   useEffect(() => {
     if (fetchAssistants && fetchAssistants.length > 0) {
       console.log("User's Assistants:", fetchAssistants);
-      router.push('/workspace'); // 🚀 Navigate to workspace
     }
     else{
       console.log('no assistants found');

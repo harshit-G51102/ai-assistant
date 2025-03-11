@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select"
 
 import AiModelOptions from '@/services/AiModelOptions';
+import { Textarea } from '@/components/ui/textarea';
 
 
 function AssistantSettings() {
@@ -27,7 +28,7 @@ function AssistantSettings() {
     }
 
     return (
-        <div className='bg-secondary lg:h-screen border-r-2 p-5 rounded-md h-[25vh] '>
+        <div className='bg-secondary lg:h-full border-r-2 p-5 rounded-md  pb-40'>
             <h2 className='font-bold text-lg'>Settings</h2>
             <div
                 className={` p-3 rounded-xl hover:scale-105 transition-all ease-in-out flex items-center gap-4 bg-secondary`}
@@ -47,7 +48,7 @@ function AssistantSettings() {
             <div className='mt-4'>
                 <h3>Model</h3>
                 <Select>
-                    <SelectTrigger className="w-[180px] border-2 border-white">
+                    <SelectTrigger className="w-[180px] border-2 dark:border-white">
                         <SelectValue placeholder="Select AI Models" />
                     </SelectTrigger>
                     <SelectContent>
@@ -56,6 +57,10 @@ function AssistantSettings() {
                         ))}
                     </SelectContent>
                 </Select>
+            </div>
+            <div>
+                <h2>Instructions</h2>
+                <Textarea placeholder='add instructuins' className='min-h-[180px] w-[230px] border-2 dark:border-white' defaultValue={assistant.instruction}></Textarea>
             </div>
         </div>
     );
