@@ -50,7 +50,7 @@ function SignIn() {
     return (
         <div className='flex items-center flex-col justify-center  h-screen'>
             <div className='flex gap-6 items-center flex-col justify-center border rounded-2xl shadow-2xl p-8'>
-                <Image src={'/logo.svg'} alt='logo' width={200} height={100} className='dark:bg-white rounded-xl'></Image>
+                <Image src={'/logo.svg'} alt='logo' width={200} height={100} className='rounded-xl'></Image>
                 <h1 className='text-2xl'>Sign In To Ai Personal Assistant And Agent</h1>
                 <Button onClick={() => googleLogin()}>Sign In With Gmail</Button>
             </div>

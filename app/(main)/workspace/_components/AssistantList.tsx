@@ -31,7 +31,7 @@ function AssistantList() {
     }, [fetchAssistants]);
 
     return (
-        <div className='p-5 bg-secondary border-r-2 h-screen overflow-scroll pb-28 rounded-md overflow-x-hidden'>
+        <div className='p-5 bg-secondary border-r-2 h-screen overflow-scroll rounded-md overflow-x-hidden'>
             <h2 className='font-bold text-lg'>Your Personal Ai Assistant</h2>
             <Button className='w-full mt-3'>Add New Assistant</Button>
             <Input className='w-full mt-2 bg-white text-black' placeholder='search' />

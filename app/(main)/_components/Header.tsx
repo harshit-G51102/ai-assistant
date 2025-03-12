@@ -12,21 +12,38 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 
 function Header() {
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     console.log(user);
+    const router = useRouter();
+
+    const handleSignOut = () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('user_token');
+        }
+        setUser(null);
+        router.push('/sign-in');
+    }
 
     return (
         <div className='p-3 shadow-sm flex justify-between items-center dark:shadow-white/20'>
-            <Image src={'/logo.svg'} alt='img' height={50} width={150} className="dark:bg-white rounded-xl" />
-            <ModeToggle />
+            <Image src={'/logo.svg'} alt='img' height={50} width={50} className=" rounded-xl" />
             <div className="flex items-center gap-4">
+                <ModeToggle />
+                <Button variant="destructive" onClick={handleSignOut}>
+                    Sign Out
+                </Button>
                 <div className="flex flex-col">
-                    {user?.name && <p className="font-bold">Welcome {user.name}</p>}
+                    {user?.name &&
+
+                        <p className="font-bold">Welcome {user.name}</p>
+                    }
                     <Dialog >
-                        <DialogTrigger className={`ml-auto ${user?.orderId?'text-blue-400':'text-green-500'}`}>{user?.orderId ? '👑 Pro Plan' : '🆓 Free Plan'}</DialogTrigger>
+                        <DialogTrigger className={`ml-auto ${user?.orderId ? 'text-blue-400' : 'text-green-500'}`}>{user?.orderId ? '👑 Pro Plan' : '🆓 Free Plan'}</DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
                                 <DialogTitle>Upgrade Plan?</DialogTitle>
@@ -36,6 +53,7 @@ function Header() {
                             </DialogHeader>
                         </DialogContent>
                     </Dialog>
+
                 </div>
                 {user?.picture && (
                     <Image
