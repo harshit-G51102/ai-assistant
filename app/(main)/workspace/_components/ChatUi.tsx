@@ -26,7 +26,7 @@ function ChatUi() {
     }, [assistant]);
 
     return (
-        <div className='flex flex-col h-screen pb-20'>
+        <div className='flex flex-col h-screen pb-[20vh] md:pb-[15vh]'>
             <div className='flex items-center justify-between lg:hidden p-8'>
                 <Sheet>
                     <SheetTrigger className='border-2 rounded-xl p-2'>Select Assistant</SheetTrigger>
@@ -51,7 +51,7 @@ function ChatUi() {
                     </SheetContent>
                 </Sheet>
             </div>
-            <div className='mt-20 flex flex-col items-center'>
+            <div className='flex flex-col items-center'>
                 <SparklesText text="How Can I Assist You?" />
                 <div className='mt-8'>
                     {assistant?.sampleQuestions?.map((ques: string, index: number) => (
@@ -64,7 +64,7 @@ function ChatUi() {
             <div className='mt-auto flex items-center w-full gap-4 border-t p-4'>
                 <Textarea
                     placeholder='Add instructions...'
-                    className='border-2 dark:border-white flex-1'
+                    className='border-2 dark:border-white flex-1 resize-none max-h-80 overflow-y-auto'
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
