@@ -9,6 +9,10 @@ export const GetAuthUserData=async(token:string)=>{
     
     }
     catch(e){
-        return e;
+        console.error('Error fetching user data:', e);
+        if (typeof window !== 'undefined') {
+            window.location.href = '/sign-in';
+        }
+        return null;
     }
 }

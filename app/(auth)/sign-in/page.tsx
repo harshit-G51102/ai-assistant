@@ -16,26 +16,37 @@ function SignIn() {
     const { user, setUser } = useContext(AuthContext);
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            if (typeof window != undefined) {
-
-                localStorage.setItem('user_token', tokenResponse.access_token);
+            try {
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('user_token', tokenResponse.access_token);
+                }
+    
+                const userInfo = await GetAuthUserData(tokenResponse.access_token);
+                console.log('User Info:', userInfo);
+    
+                const result = await CreateUser({
+                    name: userInfo?.name,
+                    email: userInfo?.email,
+                    picture: userInfo?.picture,
+                });
+    
+                console.log('CreateUser result:', result);
+    
+                if (result) {
+                    setUser(result);
+                    console.log('User set successfully:', result);
+                    console.log('Navigating to /ai-assistants');
+                    router.push('/ai-assistants');
+                } else {
+                    console.warn('CreateUser result was null or undefined');
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
             }
-            const userInfo = await GetAuthUserData(tokenResponse.access_token)
-
-            console.log(userInfo);
-
-            const result = await CreateUser({
-                name: userInfo?.name,
-                email: userInfo?.email,
-                picture: userInfo?.picture,
-            })
-            setUser(result);
-            console.log("---", result);
-            console.log('Navigating to /ai-assistants');
-            router.push('/ai-assistants');
         },
-        onError: errorResponse => console.log(errorResponse),
+        onError: errorResponse => console.error('Google login error:', errorResponse),
     });
+    
     return (
         <div className='flex items-center flex-col justify-center  h-screen'>
             <div className='flex gap-6 items-center flex-col justify-center border rounded-2xl shadow-2xl p-8'>
