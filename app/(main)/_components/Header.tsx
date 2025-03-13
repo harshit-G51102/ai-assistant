@@ -4,16 +4,20 @@ import { AuthContext } from "@/context/AuthContext";
 import Image from "next/image";
 import React, { useContext } from "react";
 import { ModeToggle } from "./ModeToggle";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
+
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
 
 
 function Header() {
@@ -42,17 +46,24 @@ function Header() {
 
                         <p className="font-bold">Welcome {user.name}</p>
                     }
-                    <Dialog >
-                        <DialogTrigger className={`ml-auto ${user?.orderId ? 'text-blue-400' : 'text-green-500'}`}>{user?.orderId ? '👑 Pro Plan' : '🆓 Free Plan'}</DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Upgrade Plan?</DialogTitle>
-                                <DialogDescription>
-                                    Upgrade your plan to enjoy premium services
-                                </DialogDescription>
-                            </DialogHeader>
-                        </DialogContent>
-                    </Dialog>
+                    <Drawer>
+                        <DrawerTrigger className={`ml-auto ${user?.orderId ? 'text-blue-400' : 'text-green-500'}`}>{user?.orderId ? '👑 Pro Plan' : '🆓 Free Plan'}</DrawerTrigger>
+                        <DrawerContent className="flex items-center justify-center">
+                            <DrawerHeader>
+                                <DrawerTitle className="text-center text-8xl">Upgrade Plan?</DrawerTitle>
+                                <DrawerDescription className="text-5xl">Upgrade Plan To Enjoy Premium Services</DrawerDescription>
+                            </DrawerHeader>
+                            <DrawerFooter>
+                                <Button className="h-10 w-60">Upgrade</Button>
+                                <DrawerClose asChild>
+                                    <div>
+                                        <Button className="h-10 w-60" variant="outline">Cancel</Button>
+                                    </div>
+                                </DrawerClose>
+                            </DrawerFooter>
+                        </DrawerContent>
+                    </Drawer>
+
 
                 </div>
                 {user?.picture && (
