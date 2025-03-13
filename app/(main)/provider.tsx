@@ -16,6 +16,7 @@ function MainProvider({
     children: React.ReactNode;
   }>) {
     const [assistant,setAssistant]=useState();
+    const [prompt,setPrompt]=useState('');
     const convex=useConvex()
       const router=useRouter();
       const {user,setUser}=useContext(AuthContext);
@@ -43,7 +44,7 @@ function MainProvider({
           return null; 
         }
   return (
-    <div><AssistantContext.Provider value={{assistant,setAssistant}}>
+    <div><AssistantContext.Provider value={{assistant,setAssistant,prompt,setPrompt}}>
       <Header></Header>{children}
     </AssistantContext.Provider>
     </div>

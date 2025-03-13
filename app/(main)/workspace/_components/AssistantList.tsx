@@ -13,11 +13,16 @@ import React, { useContext, useEffect, useState } from 'react';
 
 function AssistantList() {
 
-    const {assistant,setAssistant}=useContext(AssistantContext);
+    const {assistant,setAssistant,setPrompt}=useContext(AssistantContext);
     const { user } = useContext(AuthContext);
     const fetchAssistants = useQuery(api.userAiAssistants.getUserAssistants, user?._id ? { uid: user._id } : "skip");
 
     const [loading, setLoading] = useState(true);
+
+    const setData=(assistant:any)=>{
+        setAssistant(assistant)
+        setPrompt(assistant.instruction)
+    }
 
     useEffect(() => {
         if (fetchAssistants !== undefined) {
@@ -48,7 +53,7 @@ function AssistantList() {
                             <div
                                 className={`hover:border p-3 rounded-xl hover:scale-105 transition-all ease-in-out cursor-pointer relative flex items-center gap-4 hover:bg-gray-200 dark:hover:bg-slate-700 ${assistant_?.id==assistant?.id && 'bg-slate-500'}`}
                                 key={index}
-                                onClick={()=>setAssistant(assistant_)}
+                                onClick={()=>setData(assistant_)}
                             >
                                 <Image
                                     src={assistant_.image}

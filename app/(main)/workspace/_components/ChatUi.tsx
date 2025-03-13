@@ -5,52 +5,24 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { AssistantContext } from '@/context/AssistantContext';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet"
-import AssistantList from './AssistantList';
-import AssistantSettings from './Settings';
+
 
 
 function ChatUi() {
-    const { assistant } = useContext(AssistantContext);
+    const { assistant,prompt } = useContext(AssistantContext);
     const [query, setQuery] = useState("");
 
     useEffect(() => {
         setQuery("");
     }, [assistant]);
 
+    const handleSubmit=()=>{
+        console.log('query',query);
+        console.log('prompt',prompt);
+    }
+
     return (
         <div className='flex flex-col h-screen pb-[20vh] md:pb-[15vh]'>
-            <div className='flex items-center justify-between lg:hidden p-8'>
-                <Sheet>
-                    <SheetTrigger className='border-2 rounded-xl p-2'>Select Assistant</SheetTrigger>
-                    <SheetContent side='left'>
-                        <SheetHeader>
-                            <SheetTitle>Select Assistant</SheetTitle>
-                            <SheetDescription>
-                                <AssistantList></AssistantList>
-                            </SheetDescription>
-                        </SheetHeader>
-                    </SheetContent>
-                </Sheet>
-                <Sheet>
-                    <SheetTrigger className='border-2 rounded-xl p-2'>Assistant Settings</SheetTrigger>
-                    <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>Assistant Settings</SheetTitle>
-                            <SheetDescription>
-                                <AssistantSettings></AssistantSettings>
-                            </SheetDescription>
-                        </SheetHeader>
-                    </SheetContent>
-                </Sheet>
-            </div>
             <div className='flex flex-col items-center'>
                 <SparklesText text="How Can I Assist You?" />
                 <div className='mt-8'>
@@ -68,7 +40,7 @@ function ChatUi() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <Button>Submit</Button>
+                <Button onClick={handleSubmit}>Submit</Button>
             </div>
         </div>
     );
