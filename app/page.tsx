@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <div className="relative">
       <div className="flex items-center justify-between m-12">
-        <Image src={'/logo.svg'} alt='img' height={50} width={50} className=" rounded-xl" />
+        <Link href="#bottom"><Image src={'/logo.svg'} alt='img' height={50} width={50} className=" rounded-xl" /></Link>
         <ModeToggle />
       </div>
       <div className="fixed w-full">
@@ -28,7 +28,7 @@ export default function Home() {
           <CircularGallery bend={3} textColor="#ffffff" borderRadius={0.05} items={AiAssistantsList} />
         </div>
       </div>
-      <div className="relative mt-[100vh] z-10 flex flex-col items-center justify-center h-screen bg-secondary/70 ">
+      <div  id="bottom" className="relative mt-[100vh] z-10 flex flex-col items-center justify-center h-screen bg-secondary/70 ">
         <MorphingText texts={texts} ></MorphingText>
         <h1 className="text-6xl md:text-9xl text-center">AI Assistants</h1>
       <Link href="/ai-assistants" className="mt-12 ">
