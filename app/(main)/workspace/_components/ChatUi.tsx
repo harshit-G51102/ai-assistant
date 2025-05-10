@@ -11,10 +11,12 @@ function ChatUi() {
     const [query, setQuery] = useState("");
     const [reply, setReply] = useState("");
     const [loading, setLoading] = useState(false);
+    const [conversationHistory, setConversationHistory] = useState("");
 
     useEffect(() => {
         setQuery("");
         setReply("");
+        setConversationHistory("");
     }, [assistant]);
 
     const handleSubmit = async () => {
@@ -22,18 +24,21 @@ function ChatUi() {
         setLoading(true);
         setReply("");
 
+        const fullMessage = conversationHistory + "\nUser: " + query + "\nAssistant:";
+
         try {
             const res = await fetch("/chats", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ message: prompt + query }),
+                body: JSON.stringify({ message: prompt + fullMessage }),
             });
 
             const data = await res.json();
             if (res.ok) {
                 setReply(data.reply);
+                setConversationHistory(prev => prev + "\nUser: " + query + "\nAssistant: " + data.reply + "\n");
             } else {
                 setReply("Something went wrong. Please try again.");
             }
@@ -50,12 +55,11 @@ function ChatUi() {
             <div className='flex flex-col items-center'>
                 <SparklesText text="How Can I Assist You?" />
                 <div className='mt-8 space-y-2 text-center'>
-                    {/* Show sample questions only if no reply has been given */}
                     {!reply && assistant?.sampleQuestions?.map((ques: string, index: number) => (
                         <p
                             key={index}
                             onClick={() => setQuery(ques)}
-                            className='cursor-pointer hover:underline'
+                            className='cursor-pointer hover:font-bold border-1 border-black dark:border-white text-left rounded-4xl p-1'
                         >
                             {ques}
                         </p>
@@ -63,7 +67,6 @@ function ChatUi() {
                 </div>
             </div>
 
-            {/* Display reply with limited height and scroll */}
             {loading && (
                 <div className='mt-6 text-center text-gray-500 italic'>Generating response...</div>
             )}
@@ -73,7 +76,6 @@ function ChatUi() {
                 </div>
             )}
 
-            {/* Textarea at the bottom */}
             <div className='mt-auto flex items-center w-full gap-4 border-t p-4'>
                 <Textarea
                     placeholder='Add instructions...'
