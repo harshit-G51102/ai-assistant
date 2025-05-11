@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/context/AuthContext";
 import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ModeToggle } from "./ModeToggle";
 
 import { Button } from "@/components/ui/button";
@@ -26,10 +26,13 @@ import {
     DialogDescription,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { Progress } from "@/components/ui/progress";
+import { Wallet } from "lucide-react";
 
 function Header() {
     const { user, setUser } = useContext(AuthContext);
     const router = useRouter();
+    const [drawerOpen,setDrawerOpen]=useState(false);
 
     const handleSignOut = () => {
         if (typeof window !== 'undefined') {
@@ -54,7 +57,7 @@ function Header() {
                 <div className="flex flex-col">
                     {user?.name && <p className="font-bold hidden lg:block">Welcome {user.name}</p>}
 
-                    <Drawer>
+                    <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                         <DrawerTrigger className={`ml-auto ${user?.orderId ? 'text-blue-400' : 'text-green-500'}`}>
                             {user?.orderId ? '👑 Pro Plan' : '🆓 Free Plan'}
                         </DrawerTrigger>
@@ -66,7 +69,7 @@ function Header() {
                                 </DrawerDescription>
                             </DrawerHeader>
                             <DrawerFooter>
-                                <Button className="h-10 w-60">Upgrade</Button>
+                                <Button className="h-10 w-60">Upgrade 10$</Button>
                                 <DrawerClose asChild>
                                     <div>
                                         <Button className="h-10 w-60" variant="outline">Cancel</Button>
@@ -104,6 +107,24 @@ function Header() {
                                     className="rounded-full"
                                 />
                                 <p className="text-lg font-semibold">{user.name}</p>
+                            </div>
+                            <hr className="my-3"></hr>
+                            <div className="flex flex-col gap-2">
+                                <h2 className="font-bold ">Token Usage</h2>
+                                <h2>0/{user?.credits}</h2>
+                                <Progress value={33}></Progress>
+                                <h2 className="flex justify-between font-bold">Current Plan <span className="p-1 bg-gray-100 rounded-md text-gray-700 font-normal">{!user?.orderId ? " free plan" : " pro plan"}</span></h2>
+                            </div>
+                            <div className="p-4 border rounded-xl">
+                                <div className="flex justify-between">
+                                    <div>
+                                        <h2 className="font-bold text-lg">Pro Plan</h2>
+                                        <h2 >500,000 Tokens</h2>
+                                    </div>
+                                    <h2 className="font-bold text-lg">10$/Month</h2>
+                                </div>
+                                <hr className="my-3"></hr>
+                                <Button onClick={()=>{setDrawerOpen(true)}} className="w-full"><Wallet></Wallet> Upgrade</Button>
                             </div>
                             <Button variant="destructive" onClick={handleSignOut}>
                                 Sign Out
