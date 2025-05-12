@@ -2,7 +2,7 @@
 
 import { AuthContext } from "@/context/AuthContext";
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ModeToggle } from "./ModeToggle";
 
 import { Button } from "@/components/ui/button";
@@ -27,12 +27,30 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
-import { Wallet } from "lucide-react";
+import { Loader, Wallet } from "lucide-react";
+import axios from "axios";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { toast } from "sonner";
 
 function Header() {
     const { user, setUser } = useContext(AuthContext);
     const router = useRouter();
-    const [drawerOpen,setDrawerOpen]=useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const updateUserOrder=useMutation(api.users.UpdateTokens);
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        script.onload = () => console.log("✅ Razorpay script loaded");
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
     const handleSignOut = () => {
         if (typeof window !== 'undefined') {
@@ -41,6 +59,55 @@ function Header() {
         setUser(null);
         router.push('/sign-in');
     };
+
+    const makePayment = (subscriptionId: string) => {
+        const razorpayKey = process.env.NEXT_PUBLIC_RAZORPAY_LIVE_KEY;
+        if (!razorpayKey) {
+            console.error("Razorpay key is missing");
+            return;
+        }
+        let options = {
+            key: razorpayKey,
+            subscription_id: subscriptionId,
+            name: "Harshit's AI Assistant App",
+            description: "",
+            logo: '/logo.svg',
+            handler: async function (resp: any) {
+                console.log(resp.razorpay_payment_id)
+                console.log(resp);
+                if(resp?.razorpay_payment_id){
+                    await updateUserOrder({
+                        uid:user?._id,
+                        orderId:resp.razorpay_payment_id,
+                        credits:user.credits+5000000
+                    })
+                    toast("payment successful");
+                }
+            },
+            "prefill": {
+                user: user?.name,
+                email: user?.email
+            },
+            notes: {
+                note: "This is a test payment. Use Razorpay test cards only.",
+            },
+            theme: {
+                color: '#000000'
+            },
+        };
+
+        //@ts-ignore
+        const rjp = new window.Razorpay(options);
+        rjp.open();
+    }
+
+    const generateSubscriptionId = async () => {
+        setLoading(true);
+        const result = await axios.post('/create-subscription');
+        console.log(result.data);
+        makePayment(result?.data?.id);
+        setLoading(false);
+    }
 
     return (
         <div className='p-3 shadow-sm flex justify-between items-center dark:shadow-white/20'>
@@ -69,7 +136,7 @@ function Header() {
                                 </DrawerDescription>
                             </DrawerHeader>
                             <DrawerFooter>
-                                <Button className="h-10 w-60">Upgrade 10$</Button>
+                                <Button className="h-10 w-60" onClick={generateSubscriptionId}>{loading ? <Loader className="animate-spin"></Loader> : <Wallet></Wallet>}Upgrade 10$</Button>
                                 <DrawerClose asChild>
                                     <div>
                                         <Button className="h-10 w-60" variant="outline">Cancel</Button>
@@ -124,7 +191,7 @@ function Header() {
                                     <h2 className="font-bold text-lg">10$/Month</h2>
                                 </div>
                                 <hr className="my-3"></hr>
-                                <Button onClick={()=>{setDrawerOpen(true)}} className="w-full"><Wallet></Wallet> Upgrade</Button>
+                                <Button onClick={() => { setDrawerOpen(true) }} className="w-full"><Wallet></Wallet> Upgrade</Button>
                             </div>
                             <Button variant="destructive" onClick={handleSignOut}>
                                 Sign Out
