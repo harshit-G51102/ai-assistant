@@ -21,6 +21,7 @@ export type ASSISTANT = {
   instruction: string;
   userInstruction: string;
   sampleQuestions: string[];
+  credits:number
 };
 
 function AiAssistants() {
