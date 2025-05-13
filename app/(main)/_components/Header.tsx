@@ -38,7 +38,7 @@ function Header() {
     const router = useRouter();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const updateUserOrder=useMutation(api.users.UpdateTokens);
+    const updateUserOrder = useMutation(api.users.UpdateTokens);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -70,18 +70,21 @@ function Header() {
             key: razorpayKey,
             subscription_id: subscriptionId,
             name: "Harshit's AI Assistant App",
-            description: "",
+            description: "Get access to premium AI Assistants for enhanced productivity",
             logo: '/logo.svg',
             handler: async function (resp: any) {
                 console.log(resp.razorpay_payment_id)
                 console.log(resp);
-                if(resp?.razorpay_payment_id){
+                if (resp?.razorpay_payment_id) {
                     await updateUserOrder({
-                        uid:user?._id,
-                        orderId:resp.razorpay_payment_id,
-                        credits:user.credits+5000000
+                        uid: user?._id,
+                        orderId: resp.razorpay_payment_id,
+                        credits: user.credits + 500000
                     })
-                    toast("payment successful");
+                    toast('Payment successful');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
                 }
             },
             "prefill": {
@@ -132,7 +135,7 @@ function Header() {
                             <DrawerHeader>
                                 <DrawerTitle className="text-center text-4xl">Upgrade Plan?</DrawerTitle>
                                 <DrawerDescription className="text-xl">
-                                    Upgrade Plan To Enjoy Premium Services
+                                    Upgrade Plan To Get 500,000 More Tokens And Enjoy Premium Services
                                 </DrawerDescription>
                             </DrawerHeader>
                             <DrawerFooter>
@@ -178,7 +181,7 @@ function Header() {
                             <hr className="my-3"></hr>
                             <div className="flex flex-col gap-2">
                                 <h2 className="font-bold ">Token Usage</h2>
-                                <h2>0/{user?.credits}</h2>
+                                <h2>0/{user?.credits.toLocaleString()}</h2>
                                 <Progress value={33}></Progress>
                                 <h2 className="flex justify-between font-bold">Current Plan <span className="p-1 bg-gray-100 rounded-md text-gray-700 font-normal">{!user?.orderId ? " free plan" : " pro plan"}</span></h2>
                             </div>

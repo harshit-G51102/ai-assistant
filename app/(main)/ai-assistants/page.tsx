@@ -1,6 +1,5 @@
 "use client";
 
-
 import { BlurFade } from '@/components/magicui/blur-fade';
 import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -8,10 +7,11 @@ import { AuthContext } from '@/context/AuthContext';
 import { api } from '@/convex/_generated/api';
 import AiAssistantsList from '@/services/AiAssistantsList';
 import { useMutation, useQuery } from 'convex/react';
-import { Loader2Icon } from 'lucide-react';
+import { CrownIcon, Loader2Icon } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export type ASSISTANT = {
   id: number;
@@ -28,8 +28,8 @@ function AiAssistants() {
   const [selectedAssistant, setSelectedAssistant] = useState<ASSISTANT[]>([]); // ✅ Fixed typing
   const insertAssistant = useMutation(api.userAiAssistants.insertSelectedAssistants);
   const [loading, setLoading] = useState(false);
-  const router=useRouter();
-  
+  const router = useRouter();
+
   const onSelect = (assistant: ASSISTANT) => {
     const item = selectedAssistant.find((item) => item.id === assistant.id);
     if (item) {
@@ -47,17 +47,17 @@ function AiAssistants() {
   const onClickContinue = async () => {
     console.log('Selected assistants:', selectedAssistant);
     console.log('User:', user);
-    
-    if (!user || !user._id) { 
+
+    if (!user || !user._id) {
       console.error("User or user._id is undefined", user);
       return;
     }
-  
+
     if (selectedAssistant.length === 0) {
       console.warn("No assistants selected!");
       return;
     }
-  
+
     setLoading(true);
     try {
       const result = await insertAssistant({
@@ -73,20 +73,20 @@ function AiAssistants() {
   };
 
 
-  const fetchAssistants=useQuery(api.userAiAssistants.getUserAssistants, user?._id ? { uid: user._id } : "skip")
+  const fetchAssistants = useQuery(api.userAiAssistants.getUserAssistants, user?._id ? { uid: user._id } : "skip")
   useEffect(() => {
     if (fetchAssistants && fetchAssistants.length > 0) {
       console.log("User's Assistants:", fetchAssistants);
     }
-    else{
+    else {
       console.log('no assistants found');
     }
-  }, [fetchAssistants,router]);
+  }, [fetchAssistants, router]);
 
 
   return (
     <div className='px-10 mt-20 md:px-20 lg:px-36 xl:px-48'>
-      <div className='flex justify-between items-center'>
+      <div className='flex justify-between items-center flex-wrap gap-4'>
         <div>
           <BlurFade delay={0.25 + 0.05}>
             <h1 className='text-3xl '>Welcome To The World Of AI Assistants 🤖</h1>
@@ -99,28 +99,48 @@ function AiAssistants() {
         }
       </div>
       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5'>
-        {AiAssistantsList.map((assistant, index) => (
-          <BlurFade key={assistant.image} delay={0.25 + index * 0.05} inView>
-            <div
-              className='hover:border p-1 rounded-xl hover:scale-105 transition-all ease-in-out cursor-pointer relative'
-              key={index}
-              onClick={() => onSelect(assistant)}
-            >
-              <Checkbox
-                className={`absolute border-2 border-black m-2 `}
-                checked={isAssistantSelected(assistant)} />
-              <Image
-                src={assistant.image}
-                alt={assistant.title}
-                width={600}
-                height={600}
-                className='rounded-xl w-full h-[180px] object-cover'
-              />
-              <h1 className='text-center font-bold text-lg'>{assistant.name}</h1>
-              <h1 className='text-center text-gray-800 dark:text-gray-300'>{assistant.title}</h1>
-            </div>
-          </BlurFade>
-        ))}
+        {AiAssistantsList.map((assistant, index) => {
+          const isIneligible = user?.credits < (assistant.credits ?? 0);
+
+          return (
+            <BlurFade key={assistant.image} delay={0.25 + index * 0.05} inView>
+              <div
+                className={`hover:border p-1 rounded-xl hover:scale-105 transition-all ease-in-out cursor-pointer relative`}
+                onClick={() => {
+                  if (isIneligible) {
+                    if (isIneligible) {
+                      const requiredCredits = assistant.credits - (user?.credits ?? 0);
+                      toast.error(`Not enough credits to select this assistant. You need ${requiredCredits.toLocaleString()} more credits.`);
+                      return;
+                    }
+
+                    return;
+                  }
+                  onSelect(assistant);
+                }}
+              >
+                <Checkbox
+                  className="absolute border-2 border-black m-2"
+                  checked={isAssistantSelected(assistant)}
+                  disabled={isIneligible}
+                />
+                {assistant.credits > 10000 && (
+                  <span className="absolute right-0 text-5xl top-0 -mr-8 -mt-8">👑</span>
+                )}
+                <Image
+                  src={assistant.image}
+                  alt={assistant.title}
+                  width={600}
+                  height={600}
+                  className="rounded-xl w-full h-[180px] object-cover"
+                />
+                <h1 className="text-center font-bold text-lg">{assistant.name}</h1>
+                <h1 className="text-center text-gray-800 dark:text-gray-300">{assistant.title}</h1>
+              </div>
+            </BlurFade>
+          );
+        })}
+
       </div>
     </div>
   );

@@ -11,7 +11,8 @@ export default [
             "⚖️ How can I lose weight effectively?",
             "🍎 What should I eat before and after a workout?",
             "🏠 Can you suggest a home workout routine?"
-        ]
+        ],
+        credits:0
     },
     {
         id: 2,
@@ -25,7 +26,8 @@ export default [
             "✅ Is this sentence grammatically correct?",
             "📧 Can you check my email for grammar mistakes?",
             "📖 What’s the correct way to use a semicolon?"
-        ]
+        ],
+        credits:0
     },
     {
         id: 3,
@@ -39,7 +41,8 @@ export default [
             "🙏 How do I politely decline an invitation via email?",
             "⏳ Can you help me write a follow-up email?",
             "🎓 How do I start an email to a professor?"
-        ]
+        ],
+        credits:0
     },
     {
         id: 4,
@@ -53,7 +56,8 @@ export default [
             "🎥 How do I structure a YouTube vlog script?",
             "🔥 Can you create a script for a motivational speech video?",
             "🎮 What’s a good hook for a gaming channel intro?"
-        ]
+        ],
+        credits:100000
     },
     {
         id: 5,
@@ -67,7 +71,8 @@ export default [
             "⚡ How do I fetch data from an API in React?",
             "🐍 Can you help me with a Python script for data analysis?",
             "📂 What’s the best way to structure a Node.js project?"
-        ]
+        ],
+        credits:100000
     },
     {
         id: 6,
@@ -81,7 +86,8 @@ export default [
             "🚨 Can you help debug this JavaScript error?",
             "🐍 How do I fix a syntax error in Python?",
             "🔗 My API request is failing—what could be the issue?"
-        ]
+        ],
+        credits:400000
     },
     {
         id: 7,
@@ -95,7 +101,8 @@ export default [
             "💵 What’s the best way to save money effectively?",
             "💳 Can you explain how credit scores work?",
             "📊 How do I create a monthly budget?"
-        ]
+        ],
+        credits:400000
     },
     {
         id: 8,
@@ -109,7 +116,8 @@ export default [
             "😊 How was your day?",
             "💌 Tell me something sweet.",
             "🌹 What’s your idea of a perfect date?"
-        ]
+        ],
+        credits:1000000
     },
     {
         id: 9,
@@ -123,7 +131,8 @@ export default [
             "😂 Can you tell me a joke to make me smile?",
             "📍 How do you handle a long-distance relationship?",
             "🌆 What’s your ideal way to spend an evening together?"
-        ]
+        ],
+        credits:1000000
     },
     {
         id: 10,
@@ -137,6 +146,7 @@ export default [
             "➗ How do I solve this algebra problem?",
             "📝 What are some tips for improving my writing skills?",
             "⚖️ Can you help me understand Newton’s laws of motion?"
-        ]
+        ],
+        credits:1500000
     }
 ]
