@@ -12,7 +12,8 @@ export const insertSelectedAssistants = mutation({
         image: v.string(),
         instruction: v.string(),
         userInstruction: v.string(),
-        sampleQuestions: v.array(v.string())
+        sampleQuestions: v.array(v.string()),
+        credits:v.number()
       })
     )
   },
