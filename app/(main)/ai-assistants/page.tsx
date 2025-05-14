@@ -47,7 +47,6 @@ function AiAssistants() {
 
   const onClickContinue = async () => {
     console.log('Selected assistants:', selectedAssistant);
-    console.log('User:', user);
 
     if (!user || !user._id) {
       console.error("User or user._id is undefined", user);
@@ -125,8 +124,8 @@ function AiAssistants() {
                   checked={isAssistantSelected(assistant)}
                   disabled={isIneligible}
                 />
-                {assistant.credits > 10000 && (
-                  <span className="absolute right-0 text-5xl top-0 -mr-8 -mt-8">👑</span>
+                {isIneligible && (
+                  <span className="absolute right-0 top-0"><CrownIcon fill='yellow' className='size-8'></CrownIcon></span>
                 )}
                 <Image
                   src={assistant.image}

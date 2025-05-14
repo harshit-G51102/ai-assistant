@@ -24,8 +24,11 @@ export default function Home() {
         <ModeToggle />
       </div>
       <div className="fixed w-full">
-        <div style={{ height: '600px', position: 'relative' }} >
+        <div style={{ height: '600px', position: 'relative' }} className="hidden md:block" >
           <CircularGallery bend={3} textColor="#ffffff" borderRadius={0.05} items={AiAssistantsList} />
+        </div>
+        <div style={{ height: '600px', position: 'relative' }} className="md:hidden" >
+          <CircularGallery bend={0} textColor="#ffffff" borderRadius={0.05} items={AiAssistantsList} />
         </div>
       </div>
       <div  id="bottom" className="relative mt-[100vh] z-10 flex flex-col items-center justify-center h-screen bg-secondary/70 ">

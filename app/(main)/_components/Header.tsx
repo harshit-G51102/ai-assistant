@@ -57,7 +57,7 @@ function Header() {
             localStorage.removeItem('user_token');
         }
         setUser(null);
-        router.push('/sign-in');
+        router.push('/');
     };
 
     const makePayment = (subscriptionId: string) => {
@@ -78,7 +78,7 @@ function Header() {
                 if (resp?.razorpay_payment_id) {
                     await updateUserOrder({
                         uid: user?._id,
-                        orderId: resp.razorpay_payment_id,
+                        orderId: resp.razorpay_subscription_id,
                         credits: user.credits + 500000
                     })
                     toast('Payment successful');
@@ -107,7 +107,7 @@ function Header() {
     const generateSubscriptionId = async () => {
         setLoading(true);
         const result = await axios.post('/create-subscription');
-        console.log(result.data);
+        
         makePayment(result?.data?.id);
         setLoading(false);
     }
