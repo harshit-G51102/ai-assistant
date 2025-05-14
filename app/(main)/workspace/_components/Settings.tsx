@@ -45,7 +45,7 @@ function AssistantSettings() {
             </div>
             <div className='mt-4'>
                 <p>Model</p>
-                <Select>
+                <Select defaultValue={AiModelOptions[0].name}>
                     <SelectTrigger className="w-[180px] border-2 dark:border-white">
                         <SelectValue placeholder="Select AI Models" />
                     </SelectTrigger>
